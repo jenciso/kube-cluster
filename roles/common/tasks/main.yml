@@ -1,0 +1,11 @@
+---
+- include: common.yml
+
+- include: ntp-client.yml
+
+- include: firewalld.yml
+
+- include: upgrade.yml
+
+- include: selinux.yml
+  when: selinux_enabled

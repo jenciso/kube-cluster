@@ -1,0 +1,28 @@
+---
+- name: calico | deploy calico
+  include: calico.yml
+  when:
+    - deploy_calico|bool
+    - "'master' in group_names"
+    - k8s_master_main|bool
+  tags:
+    - calico
+
+
+- name: calico | deploy calicoctl
+  include: calicoctl.yml
+  ignore_errors: true
+  when:
+    - "'master' in group_names"
+    - deploy_calico|bool
+    - deploy_calicoctl|bool
+  tags:
+    - calicoctl
+
+
+- name: calico | restart kubelet and kube-proxy services
+  systemd: name={{ item }} state=restarted
+  with_items:
+    - kubelet
+    - kube-proxy
+  when: deploy_calico|bool

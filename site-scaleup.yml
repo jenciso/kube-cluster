@@ -1,0 +1,70 @@
+---
+- name: kubernetes | apply prereq roles
+  hosts: [new_nodes]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - common
+  tags:
+    - common
+
+
+- name: kubernetes | docker-ce
+  hosts: [new_nodes]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - docker-ce
+  tags:
+    - docker-ce
+
+
+- name: Kubernetes | node
+  hosts: [new_nodes]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - node-custom
+  tags:
+    - node-custom
+
+
+- name: kubernetes | Create certificates and kubeconfig
+  hosts: [new_nodes, master]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - sslcert-scale
+  tags:
+    - sslcert-scale
+
+
+- name: kubernetes | workers
+  hosts: [new_nodes]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - workers
+  tags:
+    - workers
+
+
+- name: kubernetes | calico
+  hosts: [new_nodes]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - calico
+  tags:
+    - calico
+
+
+- name: kubernetes | post-install
+  hosts: [new_nodes, master]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - post-install
+  tags:
+    - post-install
+

@@ -1,0 +1,20 @@
+---
+- name: metallb | copying template
+  template:
+    src: "{{ item }}"
+    dest: /tmp/
+  with_items:
+    - metallb.yaml
+    - metallb_configmap.yaml
+  when:
+    - k8s_master_main|bool
+
+
+- name: metallb | installing
+  shell: "kubectl apply -f /tmp/{{ item }}"
+  with_items:
+    - metallb.yaml
+    - metallb_configmap.yaml
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool

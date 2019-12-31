@@ -1,0 +1,15 @@
+---
+kubernetes_dir: /var/lib/kubernetes
+kubernetes_kubelet_dir: /var/lib/kubelet
+kubernetes_kube_proxy_dir: /var/lib/kube-proxy
+kubernetes_install_url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubernetes_version }}/bin/linux/amd64
+kubernetes_service_ip_range: 10.254.0.0/16
+kubernetes_cluster_cidr: 172.18.0.0/16
+deploy_workers: false
+cni_plugins_dir: /opt/cni
+cni_plugins_version: 0.7.4
+cni_plugins_url_install: https://github.com/containernetworking/plugins/releases/download/v{{ cni_plugins_version }}/cni-plugins-amd64-v{{ cni_plugins_version }}.tgz
+cni_plugins_file: "{{ cni_plugins_url_install | basename }}"
+kubelet_evictionPressureTransitionPeriod: 15m0s
+kubelet_runtimeRequestTimeout: 10m0s
+kubelet_housekeepingInterval: 30s

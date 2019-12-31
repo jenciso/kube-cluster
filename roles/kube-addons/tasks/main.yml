@@ -1,0 +1,65 @@
+---
+- name: addons | coredns
+  include: coredns.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+  tags:
+    - coredns
+
+
+- name: addons | metrics-server
+  include: metrics-server.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+  tags:
+    - metrics-server
+
+
+- name: addons | helm-tiller
+  include: helm-tiller.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+  tags:
+    - helm-tiller
+
+
+- name: addons | kube-state-metrics
+  include: kube-state-metrics.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+  tags:
+    - kube-state-metrics
+
+
+- name: addons | prometheus
+  include: prometheus.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+  tags:
+    - prometheus
+
+
+- name: addons | metallb
+  include: metallb.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+    - deploy_metallb|bool
+  tags:
+    - metallb
+
+
+- name: addons | istio
+  include: istio.yml
+  when:
+    - "'master' in group_names"
+    - deploy_addons|bool
+    - deploy_istio|bool
+  tags:
+    - istio
+

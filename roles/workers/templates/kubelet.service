@@ -1,0 +1,22 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=docker.service
+Requires=docker.service
+PartOf=docker.service
+
+[Service]
+ExecStart=/usr/bin/kubelet \
+  --config={{ kubernetes_kubelet_dir }}/kubelet-config.yaml \
+  --image-pull-progress-deadline=2m \
+  --container-runtime=docker \
+  --network-plugin=cni \
+  --register-node=true \
+  --kubeconfig={{ kubernetes_kubelet_dir }}/{{ inventory_hostname }}.kubeconfig \
+  --housekeeping-interval={{ kubelet_housekeepingInterval | default('10s') }} \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

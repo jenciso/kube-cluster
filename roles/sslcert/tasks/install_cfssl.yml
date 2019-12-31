@@ -1,0 +1,15 @@
+---
+- name: cfssl | Download package cfssl
+  get_url:
+    url: "{{ cfssl_install_url }}/cfssl_linux-amd64"
+    dest: /usr/bin/cfssl
+    mode: 0755
+  when: k8s_master_main|bool
+
+
+- name: cfssl | Download package cfssljson
+  get_url:
+    url: "{{ cfssl_install_url }}/cfssljson_linux-amd64"
+    dest: /usr/bin/cfssljson
+    mode: 0755
+  when: k8s_master_main|bool

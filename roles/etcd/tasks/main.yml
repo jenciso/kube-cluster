@@ -1,0 +1,51 @@
+---
+- name: etcd | create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/etcd
+    - /var/lib/etcd
+  tags:
+    - etcd
+
+
+- name: etcd | untar
+  unarchive: 
+    src: "{{ etcd_install_url }}"
+    dest: /opt
+    remote_src: yes
+  when: deploy_etcd|bool
+  tags:
+    - etcd
+
+
+- name: etcd | copy binaries
+  copy: 
+    src: /opt/etcd-v{{ etcd_version }}-linux-amd64/{{ item }}
+    dest: /usr/bin/{{ item }}
+    remote_src: yes
+    mode: 0755
+  with_items: 
+    - etcd
+    - etcdctl
+  notify: restart etcd
+  when: deploy_etcd|bool
+  tags:
+    - etcd
+    
+
+- name: etcd | Copy service systemd 
+  template: src=etcd.service.j2 dest=/usr/lib/systemd/system/etcd.service
+  notify: 
+    - reload systemd
+    - restart etcd
+  tags:
+    - etcd
+
+
+- name: etcd | Start service
+  service: name=etcd state=started enabled=yes
+  tags:
+    - etcd
+

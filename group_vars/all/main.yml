@@ -1,0 +1,24 @@
+---
+## KUBERNETES
+## ----------
+
+api_public_ip: "{{ lb_ip_apik8s }}"
+api_private_ip: 10.254.0.1
+api_domain: apik8s-{{ env_site }}.{{ company_domain }}
+api_external_domain: apik8s.{{ company_domain }}
+
+kubernetes_cluster_ha: true
+kubernetes_dir: /var/lib/kubernetes
+kubernetes_kubelet_dir: /var/lib/kubelet
+kubernetes_kube_proxy_dir: /var/lib/kube-proxy
+kubernetes_cluster_name: "{{ cluster_domain | default('cluster.local') }}"
+kubernetes_cluster_cidr: 172.18.0.0/16
+kubernetes_cluster_dns: 10.254.0.10
+
+kubernetes_version: 1.15.6
+calico_version: 3.10.1
+etcd_version: 3.3.11
+istio_version: 1.4.0
+
+max_pods_per_node: 110
+token_prometheus: f9bee5bcbcdc7ea23338eb8f9759f823

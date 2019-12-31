@@ -1,0 +1,9 @@
+---
+- name: node | load modules to start-up
+  shell: echo "dm_snapshot" > /etc/modules-load.d/lvm.conf
+  ignore_errors: true
+
+ 
+- name: node | load modules
+  shell: modprobe dm_snapshot
+  ignore_errors: true

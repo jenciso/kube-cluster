@@ -1,0 +1,43 @@
+---
+- name: node | setup kubelet-config.yaml
+  template:
+    src: kubelet-config.yaml
+    dest: "{{ kubernetes_kubelet_dir }}"
+  notify: 
+    - restart kubelet
+   
+
+- name: node | setup kubelet.service
+  template:
+    src: kubelet.service
+    dest: /usr/lib/systemd/system/
+  notify: 
+    - restart kubelet
+
+
+- name: node | setup kube-proxy-config.yaml
+  template:
+    src: kube-proxy-config.yaml
+    dest: "{{ kubernetes_kube_proxy_dir }}"
+  notify:
+    - restart kube-proxy
+
+
+- name: node | setup kube-proxy.service
+  template:
+    src: kube-proxy.service
+    dest: /usr/lib/systemd/system/
+  notify:  
+    - restart kube-proxy
+
+
+- name: node | start services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  with_items:
+    - kubelet
+    - kube-proxy
+

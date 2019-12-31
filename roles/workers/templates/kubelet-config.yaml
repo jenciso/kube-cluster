@@ -1,0 +1,20 @@
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "{{ kubernetes_dir }}/ca.pem"
+authorization:
+  mode: Webhook
+cgroupDriver: systemd
+clusterDomain: "{{ kubernetes_cluster_name }}"
+clusterDNS:
+  - "{{ kubernetes_cluster_dns }}"
+evictionPressureTransitionPeriod: "{{ kubelet_evictionPressureTransitionPeriod | default('5m0s') }}" 
+runtimeRequestTimeout: "{{ kubelet_runtimeRequestTimeout | default('2m0s') }}"
+maxPods: {{ max_pods_per_node | default('110') }}
+tlsCertFile: "{{ kubernetes_kubelet_dir }}/{{ inventory_hostname }}.pem"
+tlsPrivateKeyFile: "{{ kubernetes_kubelet_dir }}/{{ inventory_hostname }}-key.pem"

@@ -1,0 +1,28 @@
+---
+- name: cni_plugins | create directories
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ cni_plugins_dir }}/.install"
+    - "{{ cni_plugins_dir }}/bin"
+
+
+- name: cni_plugins | check if tar has been downloaded 
+  command: "test -f {{ cni_plugins_dir }}/.install/{{ cni_plugins_file }}"
+  register: cni_plugins_downloaded
+  failed_when: cni_plugins_downloaded.rc not in [0, 1]
+  changed_when: False
+
+  
+- name: cni_plugins | download cni_plugins
+  get_url:
+    url: "{{ cni_plugins_url_install }}"
+    dest: "{{ cni_plugins_dir }}/.install"
+  when: cni_plugins_downloaded.rc == 1
+
+
+- name: cni_plugins | untar
+  unarchive:
+    src: "{{ cni_plugins_dir }}/.install/{{ cni_plugins_file }}"
+    dest: "{{ cni_plugins_dir }}/bin"
+    remote_src: yes
+  when: cni_plugins_downloaded.rc == 1

@@ -1,0 +1,14 @@
+---
+- include: prereq.yml
+  when: deploy_workers|bool
+
+- include: install.yml
+  when: deploy_workers|bool
+
+- include: cni-plugins.yml
+  when: deploy_workers|bool
+
+- include: node.yml
+  tags:
+    - node
+

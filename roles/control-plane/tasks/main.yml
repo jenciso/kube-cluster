@@ -1,0 +1,43 @@
+---
+- name: control-plane | install binaries kubernetes
+  include: install.yml
+  when: deploy_control_plane|bool
+
+
+- name: control-plane | setup kube-apiserver
+  include: kube-apiserver.yml
+  tags:
+    - kube-apiserver
+
+ 
+- name: control-plane | setup kube-controller-manager
+  include: kube-controller-manager.yml 
+
+
+- name: control-plane | setup kube-scheduler
+  include: kube-scheduler.yml
+
+
+- name: control-plane | restart services
+  systemd: name={{ item }} state=restarted
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+  when: deploy_control_plane|bool
+
+
+- name: control-plane | check the kube-apiserver is UP
+  shell: curl -m 1 https://127.0.0.1:6443/healthz --cert {{ kubernetes_dir }}/admin.pem --key {{ kubernetes_dir }}/admin-key.pem --cacert {{ kubernetes_dir }}/ca.pem
+  args:
+    warn: no
+  register: task_result
+  until: task_result.stdout == "ok"
+  retries: 50
+  delay: 1
+  when: deploy_control_plane|bool
+
+
+- name: control-plane | rbac kubelet
+  include: rbac_kubelet.yml
+  when: deploy_control_plane|bool

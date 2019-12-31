@@ -1,0 +1,38 @@
+---
+- name: kubernetes | apply prereq roles
+  hosts: all
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - common
+  tags:
+    - common
+
+- name: kubernetes | docker-ce
+  hosts: node
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - docker-ce
+  tags:
+    - docker-ce
+
+
+- name: Kubernetes | node
+  hosts: node
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - node-custom
+  tags:
+    - node-custom
+
+
+- name: kubernetes | Create certificates and kubeconfig
+  hosts: node
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - sslcert
+  tags:
+    - sslcert

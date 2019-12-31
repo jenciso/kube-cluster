@@ -1,0 +1,22 @@
+---
+- name: workers | install binaries
+  get_url:
+    url: "{{ kubernetes_install_url }}/{{ item }}"
+    dest: /usr/bin/
+    mode: 0755
+  with_items:
+    - kubelet
+    - kube-proxy
+    - kubectl
+  when: deploy_workers|bool
+
+
+- name: workers | create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ kubernetes_dir }}"
+    - "{{ kubernetes_kubelet_dir }}"
+    - "{{ kubernetes_kube_proxy_dir }}"
+    - /var/run/kubernetes

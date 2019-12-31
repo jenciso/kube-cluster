@@ -1,0 +1,17 @@
+---
+- name: kube-state-metrics | download git project
+  git:
+    repo: https://github.com/kubernetes/kube-state-metrics.git
+    dest: /opt/kube-state-metrics
+    force: yes
+  when: 
+    - k8s_master_main|bool
+
+
+- name: kube-state-metrics | deploying ksm
+  shell: kubectl apply --kubeconfig {{ kubernetes_dir }}/admin.kubeconfig -f examples/standard
+  args:
+    chdir: /opt/kube-state-metrics
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool

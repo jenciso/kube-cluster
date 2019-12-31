@@ -1,0 +1,10 @@
+---
+deploy_certificates: true
+cfssl_install_url: https://pkg.cfssl.org/R1.2
+kubernetes_install_url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubernetes_version }}/bin/linux/amd64
+kubernetes_dir: /var/lib/kubernetes
+kubernetes_kubelet_dir: /var/lib/kubelet
+kubernetes_kube_proxy_dir: /var/lib/kube-proxy
+kubernetes_setup_dir: /opt/kubernetes/install
+temporal_dir_sslcert: /tmp
+cert_expiry_time: 87600h

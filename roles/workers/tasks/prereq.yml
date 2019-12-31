@@ -1,0 +1,11 @@
+---
+- name: workers | install packages
+  yum: 
+    state: present
+    name:
+    - socat
+    - conntrack
+    - conntrack-tools
+    - ipset
+    - glusterfs-fuse
+

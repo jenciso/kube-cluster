@@ -1,0 +1,17 @@
+---
+- name: addons | labels node
+  include: label-node.yml
+  when:
+    - "'master' in group_names"
+
+
+- name: addons | autocomplete
+  include: autocomplete.yml
+  when:
+    - "'master' in group_names"
+
+
+- name: addons | taint node
+  include: taint-node.yml
+  when:
+    - "'master' in group_names"

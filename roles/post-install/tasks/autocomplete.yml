@@ -1,0 +1,12 @@
+---
+- name: autocomplete | install package
+  yum: name=bash-completion state=present
+  
+
+- name: autocomplete | setup
+  lineinfile:
+    path: /root/.bashrc
+    regexp: "^source.*kubectl"
+    line: "source <(kubectl completion bash)"
+  tags:
+    - autocomplete

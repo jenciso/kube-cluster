@@ -1,0 +1,43 @@
+---
+- name: sslcert | Install binaries
+  include: install_cfssl.yml
+  when:
+    - "'master' in group_names"
+    - deploy_certificates|bool
+
+
+- name: sslcert | Create main certificates
+  include: create_sslcert_main.yml
+  when:
+    - "'master' in group_names"
+    - deploy_certificates|bool
+
+
+- name: sslcert | Create nodes certificates
+  include: create_sslcert_nodes.yml
+  when:
+    - "'master' in group_names"
+    - deploy_certificates|bool
+
+
+- name: sslcert | Fetching SSL files created
+  include: fetch_sslcert.yml
+  when:
+    - "'master' in group_names"
+    - deploy_certificates|bool
+
+
+- name: sslcert | Distribute files
+  include: distribute_sslcert.yml
+  when:
+    - "'node' in group_names"
+    - deploy_certificates|bool
+
+
+
+- name: kubeconfig | Create files
+  include: kubeconfig.yml
+  when:
+    - "'node' in group_names"
+    - deploy_certificates|bool
+

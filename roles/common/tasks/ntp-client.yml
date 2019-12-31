@@ -1,0 +1,39 @@
+---
+- name: Set the correct timezone.
+  file:
+    src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+    dest: /etc/localtime
+    state: link
+    force: yes
+  tags:
+    - ntp-client
+
+- name: Install NTP
+  yum: name=ntp state=installed
+  tags:
+    - ntp-client
+
+- name: Ensure NTP is running and enabled as configured.
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+  when: ntp_enabled
+  tags:
+    - ntp-client
+
+- name: Ensure NTP is stopped and disabled as configured.
+  service:
+    name: ntpd
+    state: stopped
+    enabled: no
+  when: not ntp_enabled
+  tags:
+    - ntp-client
+
+- name: Generate ntp.conf file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify: restart ntp
+  when: ntp_manage_config
+  tags:
+    - ntp-client

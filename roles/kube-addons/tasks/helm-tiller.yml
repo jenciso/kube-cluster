@@ -1,0 +1,59 @@
+---
+- name: tiller | copy yaml
+  template:
+    src: "{{ item }}"
+    dest: /tmp/
+  with_items:
+    - tiller_sa.yaml
+    - tiller_clusterrolebinding.yaml
+    - tiller_deploy.yaml
+  when: k8s_master_main|bool
+
+
+- name: tiller | deploy
+  shell: kubectl apply -f /tmp/{{ item }}
+  with_items:
+    - tiller_sa.yaml
+    - tiller_clusterrolebinding.yaml
+    - tiller_deploy.yaml
+  ignore_errors: true
+  when: k8s_master_main|bool
+
+
+- name: helm | create dir
+  file: path=/opt/helm state=directory
+  when: k8s_master_main|bool
+
+
+- name: helm | download
+  unarchive:
+    src: "{{ helm_install_url }}"
+    dest: /opt/helm
+    remote_src: yes
+  when: k8s_master_main|bool
+
+
+- name: helm | copy binaries
+  copy:
+    src: /opt/helm/linux-amd64/helm
+    dest: /usr/bin/helm
+    remote_src: yes
+    mode: 0755
+  when: k8s_master_main|bool
+
+
+- name: helm | init
+  shell: helm init --service-account tiller
+  ignore_errors: true
+  when: k8s_master_main|bool
+
+
+- name: helm | wait to tiller pod running in the cluster
+  shell: kubectl get pods -n kube-system -l name=tiller --field-selector=status.phase=Running
+  register: task_result
+  until: task_result.stdout.find('1/1') != -1
+  retries: 50
+  delay: 1
+  ignore_errors: yes
+  when: k8s_master_main|bool
+

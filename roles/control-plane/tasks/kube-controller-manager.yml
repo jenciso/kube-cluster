@@ -1,0 +1,14 @@
+---
+- name: control-plane | setup kube-controller-manager.service
+  template:
+    src: kube-controller-manager.service
+    dest: /usr/lib/systemd/system/
+  notify: restart kube-controller-manager
+
+
+- name: control-plane | start kube-controller-manager.service
+  systemd:
+    name: kube-controller-manager.service
+    state: started
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,5 @@
+k8s_users:
+  admin:
+    uid: 10001
+    pass: s3cr3t
+    group: "system:masters"

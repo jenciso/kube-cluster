@@ -1,0 +1,29 @@
+---
+- name: etcd | stop services
+  systemd:
+    name: etcd
+    state: stopped
+
+
+- name: etcd | untar
+  unarchive:
+    src: "{{ etcd_install_url }}"
+    dest: /opt
+    remote_src: yes
+
+
+- name: etcd | copy binaries
+  copy:
+    src: /opt/etcd-v{{ etcd_version }}-linux-amd64/{{ item }}
+    dest: /usr/bin/{{ item }}
+    remote_src: yes
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+
+
+- name: etcd | start services
+  systemd:
+    name: etcd
+    state: started

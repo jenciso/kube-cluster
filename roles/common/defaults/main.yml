@@ -1,0 +1,29 @@
+---
+## FIREWALLD
+firewalld_disabled: False
+firewalld_rules:
+      ssh:
+        port: 22
+        protocol: tcp
+        state: enabled
+        zone: public
+        permanent: true
+
+## SELINUX
+selinux_enabled: True
+selinux_mode: enforcing
+selinux_policy_modules:
+  - sshd_pol_create_userdir
+
+## NTP
+ntp_enabled: true
+ntp_timezone: America/Sao_Paulo
+
+ntp_manage_config: True
+ntp_servers:
+ - 0.pool.ntp.org iburst
+ - 1.pool.ntp.org iburst
+ - 2.pool.ntp.org iburst
+
+## UPGRADE
+upgrade_packages: false

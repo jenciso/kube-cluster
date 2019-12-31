@@ -1,0 +1,18 @@
+---
+- name: calicoctl | install
+  shell: "sudo curl -sL {{ calicoctl_install_url }} -o /usr/bin/calicoctl && sudo chmod 755 /usr/bin/calicoctl"
+  args:
+    warn: false
+
+
+- name: calicoctl | create etc dir
+  file:
+    path: /etc/calico
+    state: directory
+
+
+- name: calicoctl | copying template
+  template:
+    src: calicoctl.cfg
+    dest: /etc/calico/calicoctl.cfg
+

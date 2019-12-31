@@ -1,0 +1,14 @@
+---
+- name: coredns | copying template
+  template:
+    src: coredns.yaml
+    dest: /tmp/
+  when:
+    - k8s_master_main|bool
+
+
+- name: coredns | install
+  shell: kubectl apply -f /tmp/coredns.yaml
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool

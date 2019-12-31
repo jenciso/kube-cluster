@@ -1,0 +1,10 @@
+- name: taint-node | apply taint
+  shell: "{{ item }}"
+  with_items:
+    - kubectl taint nodes -l node-role.kubernetes.io/master=true node-role.kubernetes.io/master=:NoSchedule --overwrite
+    - kubectl taint nodes -l node-role.kubernetes.io/infra=true node-role.kubernetes.io/infra=:NoSchedule --overwrite
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - cluster_taint|bool
+  

@@ -1,0 +1,39 @@
+---
+- name: control-plane | copy audit-policy.yaml
+  template:
+    src: audit-policy.yaml
+    dest: "{{ kubernetes_dir }}/audit-policy.yaml"
+  notify: restart kube-apiserver
+
+
+- name: control-plane | configure basic_auth users
+  template:
+    src: basic_auth.csv
+    dest: "{{ kubernetes_dir }}/basic_auth.csv"
+    mode: 0444
+  notify: restart kube-apiserver
+
+
+- name: control-plane | token for prometheus user
+  lineinfile:
+    path: "{{ kubernetes_dir }}/token.csv"
+    line: '{{ token_prometheus }},prometheus,10002,"prometheus"'
+    create: yes
+    regexp: ^[\w]{32},prometheus,10002,"prometheus"$
+  notify: restart kube-apiserver
+
+
+- name: control-plane | setup kube-apiserver.service
+  template:
+    src: kube-apiserver.service
+    dest: /usr/lib/systemd/system/
+  notify: restart kube-apiserver
+  tags: setup-kube-apiserver
+
+
+- name: control-plane | start kube-apiserver.service
+  systemd:
+    name: kube-apiserver.service
+    state: started
+    enabled: yes
+    daemon_reload: yes

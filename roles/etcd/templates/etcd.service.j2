@@ -1,0 +1,37 @@
+{% macro initial_cluster() -%}
+{% for host in groups['etcd'] -%}
+  {{ hostvars[host]['ansible_hostname'] }}=https://{{ hostvars[host].ipv4addr }}:2380
+  {%- if not loop.last -%},{%- endif -%}
+{%- endfor -%}
+{% endmacro -%}
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/etcd \
+  --name {{ ansible_hostname }} \
+  --cert-file=/var/lib/kubernetes/kubernetes.pem \
+  --key-file=/var/lib/kubernetes/kubernetes-key.pem \
+  --peer-cert-file=/var/lib/kubernetes/kubernetes.pem \
+  --peer-key-file=/var/lib/kubernetes/kubernetes-key.pem \
+  --trusted-ca-file=/var/lib/kubernetes/ca.pem \
+  --peer-trusted-ca-file=/var/lib/kubernetes/ca.pem \
+  --peer-client-cert-auth \
+  --client-cert-auth \
+  --initial-advertise-peer-urls https://{{ ipv4addr }}:2380 \
+  --listen-peer-urls https://{{ ipv4addr }}:2380 \
+  --listen-client-urls https://{{ ipv4addr }}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ ipv4addr }}:2379 \
+  --initial-cluster-token etcd-cluster-0 \
+  --initial-cluster {{ initial_cluster() }} \
+  --initial-cluster-state new \
+  --data-dir=/var/lib/etcd
+
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

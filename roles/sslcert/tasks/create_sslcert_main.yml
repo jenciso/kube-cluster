@@ -1,0 +1,59 @@
+---
+- name: sslcert | Create directory
+  file:
+    path: "{{ kubernetes_setup_dir }}"
+    state: directory
+  when: 
+    - k8s_master_main|bool
+  
+ 
+   
+- name: sslcert | copying template files
+  template:
+    src: "{{ item }}"
+    dest: "{{ kubernetes_setup_dir }}"
+  with_items:
+    - ca-csr.json
+    - ca-config.json
+    - admin-csr.json
+    - kube-controller-manager-csr.json
+    - kube-proxy-csr.json
+    - kube-scheduler-csr.json
+    - kubernetes-csr.json
+    - service-account-csr.json
+  when:
+    - k8s_master_main|bool
+
+
+
+- name: sslcert | creating "Certificate Authority" ==> ca-key.pem, ca.pem 
+  shell: >
+    cfssl gencert 
+    -initca ca-csr.json | cfssljson -bare ca
+  args:
+    chdir: "{{ kubernetes_setup_dir }}"
+  when:
+    - k8s_master_main|bool
+
+
+
+- name: sslcert | creating Kubernetes Certificates
+  shell: >
+    cfssl gencert
+    -ca=ca.pem
+    -ca-key=ca-key.pem
+    -config=ca-config.json
+    -profile=kubernetes
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  args:
+    chdir: "{{ kubernetes_setup_dir }}"
+  with_items:
+    - admin
+    - kube-controller-manager
+    - kube-proxy
+    - kube-scheduler
+    - kubernetes
+    - service-account
+  when:
+    - k8s_master_main|bool
+

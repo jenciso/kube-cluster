@@ -1,0 +1,136 @@
+---
+- name: istio | setup
+  file: path=/opt/istio state=directory
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+
+
+- name: istio | Install 
+  shell: curl -L https://git.io/getLatestIstio | ISTIO_VERSION={{ istio_version }} sh -
+  args:
+    chdir: /opt/istio  
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+- name: istio | link symbolic
+  file: src=/opt/istio/istio-{{ istio_version }} dest=/opt/istio/istio state=link force=yes
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+
+- name: istio | create namespace
+  shell:
+    cmd: |
+      cat <<EOF | kubectl apply -f -
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: istio-system
+      EOF
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+
+
+- name: istio | Create the init crd to istio
+  shell: >
+    helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
+  args:
+    chdir: "/opt/istio/istio-{{ istio_version }}"
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+
+- name: istio | Create the template file via HELM
+  shell: >
+    helm template install/kubernetes/helm/istio --name istio
+    --namespace istio-system
+    --set global.proxy.clusterDomain={{ kubernetes_cluster_name }}
+    --set global.outboundTrafficPolicy.mode=ALLOW_ANY
+    --set global.proxy.resources.limits.memory=256Mi
+    --set grafana.persist=true
+    --set grafana.storageClassName=default
+    --set grafana.enabled=true
+    --set servicegraph.enabled=true
+    --set tracing.enabled=true
+    --set kiali.enabled=true
+    --set kiali.createDemoSecret=true
+    --set kiali.ingress.enabled=true
+    --set kiali.dashboard.jaegerURL={{ istio_jaeger_url }}
+    --set kiali.contextPath=/
+    --set kiali.dashboard.grafanaURL={{ istio_grafana_url }}
+    --set kiali.ingress.enabled=true
+    > /opt/istio/istio.yaml
+  args:
+    chdir: "/opt/istio/istio-{{ istio_version }}"
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+
+- name: istio | check if all the jobs finished successfully 
+  shell: kubectl -n istio-system wait --for=condition=complete job --all -o jsonpath='{.status.succeeded}'
+  register: task_result
+  until: task_result.stdout == "111"
+  retries: 50
+  delay: 5
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+  tags:
+    - update_istio
+
+
+- name: istio | Install istio
+  shell: kubectl apply -f /opt/istio/istio.yaml
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+
+- name: istio | Create kiali user/pass
+  shell:
+    cmd: |
+      cat <<EOF | kubectl apply -f -
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: kiali
+        namespace: istio-system
+        labels:
+          app: kiali
+      type: Opaque
+      data:
+        username: YWRtaW4=
+        passphrase: YWRtaW4=
+      EOF
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio
+
+
+- name: istio | istioctl client setup
+  lineinfile:
+    path: /root/.bashrc
+    line: "export PATH=$PATH:/opt/istio/istio/bin"
+  when:
+    - k8s_master_main|bool
+  ignore_errors: true
+  tags:
+    - update_istio

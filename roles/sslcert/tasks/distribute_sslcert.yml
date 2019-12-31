@@ -1,0 +1,56 @@
+---
+- name: sslcert | Create kubernetes directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ kubernetes_dir }}"
+    - "{{ kubernetes_kubelet_dir }}"
+    - "{{ kubernetes_kube_proxy_dir }}"
+
+
+
+- name: distribute_sslcert | Distribuite certificates to etcd
+  copy:
+    src: "{{ temporal_dir_sslcert }}/{{ item }}"
+    dest: "{{ kubernetes_dir }}"
+  with_items:
+    - ca.pem
+    - kubernetes.pem
+    - kubernetes-key.pem
+  when: "'etcd' in group_names"
+
+
+
+- name: distribute_sslcert | Distribuite certificates to master
+  copy:
+    src: "{{ temporal_dir_sslcert }}/{{ item }}"
+    dest: "{{ kubernetes_dir }}"
+  with_items:
+    - ca.pem
+    - ca-key.pem
+    - admin.pem
+    - admin-key.pem
+    - kubernetes.pem
+    - kubernetes-key.pem
+    - kube-scheduler.pem
+    - kube-scheduler-key.pem
+    - kube-controller-manager.pem
+    - kube-controller-manager-key.pem
+    - service-account.pem
+    - service-account-key.pem
+  when: "'master' in group_names"
+
+
+
+- name: distribute_sslcert | Distribuite certificates to node
+  copy:
+    src: "{{ temporal_dir_sslcert }}/{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'ca.pem', dest: '{{ kubernetes_dir }}' }
+    - { src: 'kube-proxy.pem', dest: '{{ kubernetes_kube_proxy_dir }}' }
+    - { src: 'kube-proxy-key.pem', dest: '{{ kubernetes_kube_proxy_dir }}' }
+    - { src: '{{ inventory_hostname }}.pem', dest: '{{ kubernetes_kubelet_dir }}' }
+    - { src: '{{ inventory_hostname }}-key.pem', dest: '{{ kubernetes_kubelet_dir }}' } 
+  when: "'node' in group_names"

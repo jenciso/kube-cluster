@@ -1,0 +1,35 @@
+[KUBERNETES:children]
+lb
+master
+etcd
+node
+
+[lab:children]
+KUBERNETES
+
+[KUBERNETES:vars]
+env_site=lab
+lb_ip_apik8s=10.0.2.10
+metallb_default_pool=10.0.2.20-10.0.3.30
+deploy_docker_lvm_storage=false
+kubernetes_cluster_ha=false
+company_domain=enciso.website
+
+[lb]
+kube-master.enciso.website  ansible_host=192.168.56.10  ipv4addr=10.0.2.10  kubernetes_cluster_ha=false
+
+[master]
+kube-master.enciso.website  ansible_host=192.168.56.10  ipv4addr=10.0.2.10  k8s_master_main=true
+
+[etcd]
+kube-master.enciso.website  ansible_host=192.168.56.10  ipv4addr=10.0.2.10
+
+[node_master]
+kube-master.enciso.website  ansible_host=192.168.56.10  ipv4addr=10.0.2.10  k8s_node_group_name=master
+
+[node_compute]
+kube-node01.enciso.website  ansible_host=192.168.56.11  ipv4addr=10.0.2.11  k8s_node_group_name=compute
+
+[node:children]
+node_master
+node_compute

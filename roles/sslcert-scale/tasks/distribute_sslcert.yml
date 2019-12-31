@@ -1,0 +1,22 @@
+---
+- name: sslcert | Create kubernetes directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ kubernetes_dir }}"
+    - "{{ kubernetes_kubelet_dir }}"
+    - "{{ kubernetes_kube_proxy_dir }}"
+
+
+- name: distribute_sslcert | Distribuite certificates to node
+  copy:
+    src: "{{ temporal_dir_sslcert }}/{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'ca.pem', dest: '{{ kubernetes_dir }}' }
+    - { src: 'kube-proxy.pem', dest: '{{ kubernetes_kube_proxy_dir }}' }
+    - { src: 'kube-proxy-key.pem', dest: '{{ kubernetes_kube_proxy_dir }}' }
+    - { src: '{{ inventory_hostname }}.pem', dest: '{{ kubernetes_kubelet_dir }}' }
+    - { src: '{{ inventory_hostname }}-key.pem', dest: '{{ kubernetes_kubelet_dir }}' } 
+  when: "'new_nodes' in group_names"

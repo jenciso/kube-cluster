@@ -1,0 +1,127 @@
+---
+- name: glusterfs | download project
+  git:
+    repo: https://github.com/gluster/gluster-kubernetes.git
+    dest: /opt/gluster-kubernetes
+    force: yes
+  when: 
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+
+- name: glusterfs | copying topology.json
+  template:
+    src: topology.json
+    dest: /opt/gluster-kubernetes/deploy/topology.json
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | copying template glusterfs-daemonset.yaml
+  template: src=glusterfs-daemonset.yaml dest=/opt/gluster-kubernetes/deploy/kube-templates/
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | copying template heketi-deployment.yaml
+  template: src=heketi-deployment.yaml dest=/opt/gluster-kubernetes/deploy/kube-templates/
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | copying template deploy-heketi-deployment.yaml
+  template: src=deploy-heketi-deployment.yaml dest=/opt/gluster-kubernetes/deploy/kube-templates/
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | create namespace
+  shell: kubectl create namespace gluster-heketi
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | copying template to exec gk-deploy
+  copy: 
+    src: gk-deploy 
+    dest: /opt/gluster-kubernetes/deploy/
+    mode: 0755
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+  
+
+- name: glusterfs | deploying gluster and heketi ... this process is slow, be patient
+  shell: sleep 2; ./gk-deploy -g -y -w 1200 -n gluster-heketi
+  args:
+    chdir: /opt/gluster-kubernetes/deploy
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+
+
+- name: glusterfs | Get HEKETI_CLI_SERVER
+  shell:
+    cmd: kubectl get svc/heketi --template {{ 'http://{{.spec.clusterIP}}:8080' }} -n gluster-heketi
+  register: heketi_cli_server
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+  tags: glusterfs_config
+
+
+
+- name: glusterfs | Create storageClass Glusterfs
+  shell:
+    cmd: |
+      cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+      apiVersion: storage.k8s.io/v1beta1
+      kind: StorageClass
+      metadata:
+        name: {{ item }}
+      provisioner: kubernetes.io/glusterfs
+      parameters:
+        resturl: {{ heketi_cli_server.stdout }}
+      EOF
+  args:
+    chdir: "{{ kubernetes_dir }}"
+  with_items:
+    - standard
+    - glusterfs-storage
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool
+  tags: glusterfs_config
+
+
+- name: glusterfs | Create storageClass default
+  shell:
+    cmd: |
+      cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+      apiVersion: storage.k8s.io/v1beta1
+      kind: StorageClass
+      metadata:
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+        name: default
+      provisioner: kubernetes.io/glusterfs
+      reclaimPolicy: Delete
+      parameters:
+        resturl: {{ heketi_cli_server.stdout }}
+      EOF
+  args:
+    chdir: "{{ kubernetes_dir }}"
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool
+    - deploy_glusterfs|bool

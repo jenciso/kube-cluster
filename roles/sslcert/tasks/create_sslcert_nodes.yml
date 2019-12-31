@@ -1,0 +1,24 @@
+---
+- name: sslcert | Copying templates to use in Kubelet Client Certificates
+  template:
+    src: node-csr.json
+    dest: "{{ kubernetes_setup_dir }}/{{ item }}-csr.json"
+  with_items: "{{ groups['node'] }}"
+  when: 
+    - k8s_master_main|bool
+
+
+- name: sslcert | Creating The Kubelet Client Certificates 
+  shell: >
+    cfssl gencert
+    -ca=ca.pem
+    -ca-key=ca-key.pem
+    -config=ca-config.json
+    -hostname={{ item }},{{ hostvars[ item ].ipv4addr }}
+    -profile=kubernetes
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  args:
+    chdir: "{{ kubernetes_setup_dir }}"
+  with_items: "{{ groups['node'] }}"
+  when:
+    - k8s_master_main|bool

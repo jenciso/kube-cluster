@@ -1,0 +1,21 @@
+---
+- name: control-plane | configure kube-scheduler
+  template:
+    src: kube-scheduler.yaml
+    dest: "{{ kubernetes_dir }}/kube-scheduler.yaml"
+  notify: restart kube-scheduler
+
+
+- name: control-plane | setup kube-scheduler.service
+  template:
+    src: kube-scheduler.service
+    dest: /usr/lib/systemd/system/
+  notify: restart kube-scheduler
+
+
+- name: control-plane | start kube-scheduler.service
+  systemd:
+    name: kube-scheduler.service
+    state: started
+    enabled: yes
+    daemon_reload: yes

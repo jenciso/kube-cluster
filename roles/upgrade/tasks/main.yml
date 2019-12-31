@@ -1,0 +1,26 @@
+---
+- name: upgrade | upgrade control-plane
+  include: upgrade_master.yml
+  when: 
+    - "'master' in group_names"
+    - upgrade_master
+  tags:
+    - upgrade_master
+
+
+- name: upgrade | upgrade node
+  include: upgrade_node.yml
+  when: 
+    - "'node' in group_names"
+    - upgrade_node
+  tags:
+    - upgrade_node
+
+
+- name: upgrade | upgrade etcd
+  include: upgrade_etcd.yml
+  when: 
+    - "'etcd' in group_names"
+    - upgrade_etcd
+  tags:
+    - upgrade_etcd

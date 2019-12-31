@@ -1,0 +1,15 @@
+[Unit]
+Description=Kubernetes Kube Proxy
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+
+[Service]
+ExecStart=/usr/bin/kube-proxy \
+  --config={{ kubernetes_kube_proxy_dir }}/kube-proxy-config.yaml \
+  --masquerade-all=true \
+  --proxy-mode=iptables \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

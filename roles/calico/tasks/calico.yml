@@ -1,0 +1,39 @@
+- name: calico | create dir
+  file: path=/opt/calico state=directory
+
+
+- name: calico | copying templates files
+  template:
+    src: calico.yaml
+    dest: /opt/calico
+
+
+- name: calico | get etcd_key base64
+  shell: cat {{ kubernetes_dir }}/kubernetes-key.pem | base64 | tr -d '\n'
+  register: etcd_key
+
+
+- name: calico | get etcd_cert base64
+  shell: cat {{ kubernetes_dir }}/kubernetes.pem | base64 | tr -d '\n'
+  register: etcd_cert
+
+
+- name: calico | get etcd_ca base64
+  shell: cat {{ kubernetes_dir }}/ca.pem | base64 | tr -d '\n'
+  register: etcd_ca
+
+
+- name: calico | replacing etcd values
+  lineinfile:
+    dest: /opt/calico/calico.yaml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '  \# etcd-ca: null', line: '  etcd-ca: "{{ etcd_ca.stdout }}"' }
+    - { regexp: '  \# etcd-key: null', line: '  etcd-key: "{{ etcd_key.stdout }}"' }
+    - { regexp: '  \# etcd-cert: null', line: '  etcd-cert: "{{ etcd_cert.stdout }}"' }
+
+
+- name: calico | apply calico.yaml
+  shell: kubectl apply -f /opt/calico/calico.yaml
+  ignore_errors: true

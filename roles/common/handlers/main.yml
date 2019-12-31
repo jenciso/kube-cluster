@@ -1,0 +1,8 @@
+---
+- name: restart firewalld
+  service: name=firewalld state=restarted enabled=yes
+
+- name: restart ntp
+  service: name=ntpd state=restarted
+  when: ntp_enabled
+

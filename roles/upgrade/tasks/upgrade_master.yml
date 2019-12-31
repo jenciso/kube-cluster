@@ -1,0 +1,31 @@
+---
+- name: master | stop services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+
+
+- name: master | upgrade binaries
+  get_url:
+    url: "{{ kubernetes_install_url }}/{{ item }}"
+    dest: /usr/bin/
+    mode: 0755
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+    - kubectl
+
+
+- name: master | start services
+  systemd:
+    name: "{{ item }}"
+    state: started
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler

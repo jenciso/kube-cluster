@@ -1,0 +1,4 @@
+---
+upgrade_master: false
+upgrade_node: false
+upgrade_etcd: false

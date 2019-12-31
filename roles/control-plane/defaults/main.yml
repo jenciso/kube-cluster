@@ -1,0 +1,6 @@
+---
+kubernetes_dir: /var/lib/kubernetes
+kubernetes_install_url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubernetes_version }}/bin/linux/amd64
+kubernetes_service_ip_range: 10.254.0.0/16
+kubernetes_cluster_cidr: 172.18.0.0/16
+deploy_control_plane: false

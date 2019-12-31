@@ -1,0 +1,23 @@
+---
+## vars to deploy cluster
+deploy_etcd: true
+deploy_control_plane: true
+deploy_workers: true
+deploy_calico: true
+deploy_addons: true
+deploy_glusterfs: false
+deploy_prometheus: false
+deploy_istio: false
+deploy_metallb: false
+
+company_domain: e-unicred.com.br
+proxy_enabled: false
+
+node_taint: true
+
+## Mirror URL's
+#mirror_server: mirror.{{ company_domain }}
+#kubernetes_install_url: https://{{ mirror_server }}/repo/linux/kubernetes/v{{ kubernetes_version }}
+#etcd_install_url: https://{{ mirror_server }}/repo/linux/etcd/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+#cni_plugins_url_install : https://{{ mirror_server }}/repo/linux/kubernetes/network-plugins/cni-plugins-amd64-v{{ cni_plugins_version }}.tgz
+#cfssl_install_url: https://{{ mirror_server }}/repo/linux/cfssl

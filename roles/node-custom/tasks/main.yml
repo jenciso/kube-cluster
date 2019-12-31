@@ -1,0 +1,8 @@
+---
+- include: swapoff.yml
+
+- include: lvm.yml
+
+- include: tuning.yml
+
+- include: docker-images.yml

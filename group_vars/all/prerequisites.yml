@@ -1,0 +1,12 @@
+---
+## VARS
+deploy_docker: true
+wipefs_device: true 
+
+docker_version: 19.03.5
+docker_package: "docker-ce-{{ docker_version }}"
+docker_lvm_device: /dev/sdb               #should be a disk for docker storage
+docker_lvm_device_number: 1
+docker_volume_group: docker-vg            #volume group for docker storage
+insecure_registry:
+  - 127.0.0.0/8

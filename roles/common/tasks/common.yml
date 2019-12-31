@@ -1,0 +1,27 @@
+---
+- name: common |  Install CentOS  packages core
+  yum: 
+    state: present
+    name:
+    - net-tools
+    - bind-utils
+    - wget
+    - lsof
+    - nfs-utils
+    - epel-release
+    - libselinux-python
+    - ntpdate
+    - sysstat
+    - telnet
+    - setroubleshoot
+    - setools
+    - policycoreutils-python
+    - yum-utils
+    - git
+    - unzip
+    - mlocate
+    - net-snmp
+    - firewalld
+    - python-firewall
+  tags:
+    - common

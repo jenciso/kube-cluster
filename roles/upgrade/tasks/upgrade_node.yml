@@ -1,0 +1,29 @@
+---
+- name: node | stop services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - kubelet
+    - kube-proxy
+
+
+- name: node | upgrade binaries
+  get_url:
+    url: "{{ kubernetes_install_url }}/{{ item }}"
+    dest: /usr/bin/
+    mode: 0755
+  with_items:
+    - kubelet
+    - kube-proxy
+    - kubectl
+
+
+- name: node | start services
+  systemd:
+    name: "{{ item }}"
+    state: started
+  with_items:
+    - kubelet
+    - kube-proxy
+

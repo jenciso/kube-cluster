@@ -1,0 +1,23 @@
+---
+- name: sslcert | Create nodes certificates
+  include: create_sslcert_nodes.yml
+  when:
+    - "'master' in group_names"
+
+
+- name: sslcert | Fetching SSL files created
+  include: fetch_sslcert.yml
+  when:
+    - "'master' in group_names"
+
+
+- name: sslcert | Distribute files
+  include: distribute_sslcert.yml
+  when:
+    - "'node' in group_names"
+
+
+- name: kubeconfig | Create files
+  include: kubeconfig.yml
+  when:
+    - "'node' in group_names"

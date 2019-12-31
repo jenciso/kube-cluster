@@ -1,0 +1,28 @@
+---
+- name: pam_limits | Change /etc/security/limits.conf
+  pam_limits: domain='*' limit_type='-' limit_item=nofile value=64000
+  tags:
+    - tuning
+    - pam_limits
+
+
+- name: ulimit | Set sysctl parameters to increase the max number of threads - kernel.pid_max
+  sysctl: 
+    name: kernel.pid_max 
+    value: "4194303"
+    sysctl_set: yes 
+    state: present 
+    reload: yes
+  tags:
+    - tuning
+
+
+- name: inotify | Set sysctl parameters to increase the max_user_watches
+  sysctl:
+    name: fs.inotify.max_user_watches
+    value: "1048576"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  tags:
+    - tuning

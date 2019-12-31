@@ -1,0 +1,12 @@
+---
+- name: label-node | waiting to node get ready
+  shell: >
+    kubectl get nodes {{ item }} -o=name && \
+    kubectl label nodes {{ item }} node-role.kubernetes.io/{{ hostvars[ item ].k8s_node_group_name }}=true --overwrite
+  register: task_result
+  until: task_result.stdout.find('node/' ~ item) != -1
+  retries: 50
+  delay: 10
+  ignore_errors: true
+  with_items: "{{ groups['node'] }}"
+  when: k8s_master_main|bool

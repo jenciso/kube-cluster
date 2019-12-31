@@ -1,0 +1,6 @@
+---
+deploy_prometheus: false
+deploy_istio: false
+helm_install_url: https://storage.googleapis.com/kubernetes-helm/helm-v2.16.1-linux-amd64.tar.gz
+istio_jaeger_url: http://jaeger-query:16686
+istio_grafana_url: http://grafana:3000
