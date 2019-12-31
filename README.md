@@ -43,7 +43,7 @@ Setup:
 
 ## INSTALLATION
 
-Create a api domain to communicate with the API externally. Ex. `apik8s-lab.e-unicred.com.br` 
+Create a api domain to communicate with the API externally. Ex. `apik8s-lab.enciso.website` 
 
 To do that, you need to set the var `api_domain` in `group_vars/all/main.yml` file 
 

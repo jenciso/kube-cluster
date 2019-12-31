@@ -10,7 +10,7 @@ new_nodes
 ...
 ...
 [new_nodes]
-dcbvm090lb343.e-unicred.com.br  ipv4addr=10.64.13.220  k8s_node_group_name=compute  docker_lvm_setup=true  max_pods_per_node=220
+dcbvm090lb343.enciso.website  ipv4addr=10.64.13.220  k8s_node_group_name=compute  docker_lvm_setup=true  max_pods_per_node=220
 ```
 
 * Run the ansible playbook
@@ -35,6 +35,6 @@ To delete nodes from the cluster follow this steps
 
 Ex:
 ```
-kubectl drain dcbvm090lb343.e-unicred.com.br --ignore-daemonsets
-kubectl delete node dcbvm090lb343.e-unicred.com.br
+kubectl drain dcbvm090lb343.enciso.website --ignore-daemonsets
+kubectl delete node dcbvm090lb343.enciso.website
 ```
