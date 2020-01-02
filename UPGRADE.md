@@ -11,14 +11,14 @@ Download the latest kubernetes version in our mirror server `https://mirror.enci
 
 ```sh
 cd /public/repo/linux/kubernetes
-./download-version.sh 1.15.3
+./download-version.sh 1.17.1
 ```
 
 * Into this playbook, modify the kubernetes version in this file `group_vars/all/main.yml`
 
 
 ```yaml
-kubernetes_version: 1.15.3
+kubernetes_version: 1.17.1
 ``` 
 
 * Run the playbook `site-upgrade.yml`
@@ -33,7 +33,7 @@ sudo ansible-playbook site-upgrade.yml -i inventory-tst -t upgrade_node -e upgra
 * Done. To test execute:
 
 ```sh
-kubectl get nodes -o wide | grep 1.15.3
+kubectl get nodes -o wide | grep 1.17.1
 ```
 
 -----
