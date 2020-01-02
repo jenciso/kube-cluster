@@ -3,7 +3,7 @@
   include: upgrade_master.yml
   when: 
     - "'master' in group_names"
-    - upgrade_master
+    - upgrade_master|bool
   tags:
     - upgrade_master
 
@@ -12,7 +12,7 @@
   include: upgrade_node.yml
   when: 
     - "'node' in group_names"
-    - upgrade_node
+    - upgrade_node|bool
   tags:
     - upgrade_node
 
@@ -21,6 +21,6 @@
   include: upgrade_etcd.yml
   when: 
     - "'etcd' in group_names"
-    - upgrade_etcd
+    - upgrade_etcd|bool
   tags:
     - upgrade_etcd

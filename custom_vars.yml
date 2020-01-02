@@ -10,10 +10,12 @@ deploy_prometheus: false
 deploy_istio: false
 deploy_metallb: false
 
-company_domain: enciso.website
+company_domain: corp.beemovil.com
+ntp_timezone: America/Lima
 proxy_enabled: false
+cluster_taint: true
 
-node_taint: true
+kubernetes_install_url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubernetes_version }}/bin/linux/amd64
 
 ## Mirror URL's
 #mirror_server: mirror.{{ company_domain }}

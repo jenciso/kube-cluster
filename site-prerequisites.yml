@@ -1,7 +1,7 @@
 ---
 - name: kubernetes | apply prereq roles
   hosts: all
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - common
@@ -10,7 +10,7 @@
 
 - name: kubernetes | docker-ce
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - docker-ce
@@ -20,7 +20,7 @@
 
 - name: Kubernetes | node
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - node-custom
@@ -30,7 +30,7 @@
 
 - name: kubernetes | Create certificates and kubeconfig
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - sslcert

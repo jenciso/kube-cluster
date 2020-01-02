@@ -2,7 +2,7 @@
 - name: kubernetes | Upgrade
   hosts: [master, node, etcd]
   serial: 1
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - upgrade

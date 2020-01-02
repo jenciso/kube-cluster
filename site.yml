@@ -1,7 +1,7 @@
 ---
 - name: kubernetes | etcd
   hosts: etcd
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - etcd
@@ -10,7 +10,7 @@
 
 - name: kubernetes | lb
   hosts: lb
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - { role: keepalived, when: kubernetes_cluster_ha|bool }
@@ -20,7 +20,7 @@
 
 - name: kubernetes | control-plane
   hosts: master
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - control-plane
@@ -30,7 +30,7 @@
 
 - name: kubernetes | workers
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - workers
@@ -40,7 +40,7 @@
 
 - name: kubernetes | workers
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - calico
@@ -50,7 +50,7 @@
 
 - name: kubernetes | glusterfs
   hosts: master
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - glusterfs
@@ -60,7 +60,7 @@
 
 - name: kubernetes | post-install
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - post-install
@@ -70,7 +70,7 @@
 
 - name: kubernetes | addons
   hosts: node
-  remote_user: ansible
+  remote_user: centos
   environment: "{{ proxy_env }}"
   roles:
     - kube-addons
