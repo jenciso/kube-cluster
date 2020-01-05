@@ -83,7 +83,7 @@
 - name: glusterfs | Create storageClass Glusterfs
   shell:
     cmd: |
-      cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+      cat <<EOF | kubectl apply -f -
       apiVersion: storage.k8s.io/v1beta1
       kind: StorageClass
       metadata:
@@ -107,7 +107,7 @@
 - name: glusterfs | Create storageClass default
   shell:
     cmd: |
-      cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+      cat <<EOF | kubectl apply -f -
       apiVersion: storage.k8s.io/v1beta1
       kind: StorageClass
       metadata:
