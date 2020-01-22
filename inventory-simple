@@ -9,28 +9,26 @@ KUBERNETES
 
 [KUBERNETES:vars]
 env_site=lab
-lb_ip_apik8s=10.0.1.71
-metallb_default_pool=10.0.1.81-10.0.1.89
+lb_ip_apik8s=192.168.122.100
+metallb_default_pool=192.168.122.90-192.168.122.99
 deploy_docker_lvm_storage=false
 kubernetes_cluster_ha=false
 company_domain=enciso.website
 
 [lb]
-kube-master.enciso.website  ipv4addr=10.0.1.71  kubernetes_cluster_ha=false
+k8s-master.enciso.website  ipv4addr=192.168.122.100  kubernetes_cluster_ha=false
 
 [master]
-kube-master.enciso.website  ipv4addr=10.0.1.71  k8s_master_main=true
+k8s-master.enciso.website  ipv4addr=192.168.122.100  k8s_master_main=true
 
 [etcd]
-kube-master.enciso.website  ipv4addr=10.0.1.71
+k8s-master.enciso.website  ipv4addr=192.168.122.100
 
 [node_master]
-kube-master.enciso.website  ipv4addr=10.0.1.71  k8s_node_group_name=master
+k8s-master.enciso.website  ipv4addr=192.168.122.100  k8s_node_group_name=master
 
 [node_compute]
-kube-node01.enciso.website  ipv4addr=10.0.1.72  k8s_node_group_name=compute
-kube-node02.enciso.website  ipv4addr=10.0.1.73  k8s_node_group_name=compute
-kube-node03.enciso.website  ipv4addr=10.0.1.74  k8s_node_group_name=compute
+k8s-node01.enciso.website  ipv4addr=192.168.122.101  k8s_node_group_name=compute
 
 
 [node:children]
