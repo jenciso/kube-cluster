@@ -5,13 +5,13 @@ Steps:
 * Step 1: Running the pre-requisites playbook
 
 ```bash
-sudo ansible-playbook site-prerequisites.yml -i inventory-simple --extra-vars "@custom_vars.yml"
+ansible-playbook site-prerequisites.yml -i inventory-simple --extra-vars "@custom_vars.yml"
 ```
 
 * Step 2: Deploying the cluster
 
 ```
-sudo ansible-playbook site.yml -i inventory-lab --extra-vars "@custom_vars.yml"
+ansible-playbook site.yml -i inventory-simple --extra-vars "@custom_vars.yml"
 ```
 
 Notes:

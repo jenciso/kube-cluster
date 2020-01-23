@@ -16,19 +16,19 @@ kubernetes_cluster_ha=false
 company_domain=enciso.website
 
 [lb]
-k8s-master.enciso.website  ipv4addr=192.168.122.100  kubernetes_cluster_ha=false
+master-lab.enciso.website  ipv4addr=192.168.122.100  kubernetes_cluster_ha=false
 
 [master]
-k8s-master.enciso.website  ipv4addr=192.168.122.100  k8s_master_main=true
+master-lab.enciso.website  ipv4addr=192.168.122.100  k8s_master_main=true
 
 [etcd]
-k8s-master.enciso.website  ipv4addr=192.168.122.100
+master-lab.enciso.website  ipv4addr=192.168.122.100
 
 [node_master]
-k8s-master.enciso.website  ipv4addr=192.168.122.100  k8s_node_group_name=master
+master-lab.enciso.website  ipv4addr=192.168.122.100  k8s_node_group_name=master
 
 [node_compute]
-k8s-node01.enciso.website  ipv4addr=192.168.122.101  k8s_node_group_name=compute
+node01-lab.enciso.website  ipv4addr=192.168.122.101  k8s_node_group_name=compute
 
 
 [node:children]
