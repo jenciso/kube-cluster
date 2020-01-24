@@ -48,3 +48,18 @@ Create a api domain to communicate with the API externally. Ex. `apik8s-lab.enci
 To do that, you need to set the var `api_domain` in `group_vars/all/main.yml` file 
 
 Then, follow the instructions detailed in [INSTALL.md](INSTALL.md).
+
+
+## CLIENT SETUP 
+
+Ex. env_site=lab
+
+```
+export USER=admin
+export PASS=s3cr3t
+export ENV_SITE=lab
+kubectl config set-credentials $USER --username=$USER --password=$PAAS
+kubectl config set-cluster $ENV_SITE --server=https://apik8s-$ENV_SITE.enciso.website --insecure-skip-tls-verify
+kubectl config set-context k8s-$ENV_SITE --cluster=$ENV_SITE --user=$USER
+kubectl config use-context k8s-$ENV_SITE
+```
