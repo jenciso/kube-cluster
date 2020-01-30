@@ -58,7 +58,7 @@ Ex. env_site=lab
 export USER=admin
 export PASS=s3cr3t
 export ENV_SITE=lab
-kubectl config set-credentials $USER --username=$USER --password=$PAAS
+kubectl config set-credentials $USER --username=$USER --password=$PASS
 kubectl config set-cluster $ENV_SITE --server=https://apik8s-$ENV_SITE.enciso.website --insecure-skip-tls-verify
 kubectl config set-context k8s-$ENV_SITE --cluster=$ENV_SITE --user=$USER
 kubectl config use-context k8s-$ENV_SITE
