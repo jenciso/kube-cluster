@@ -10,7 +10,7 @@ deploy_prometheus: false
 deploy_istio: false
 deploy_metallb: true
 
-company_domain: enciso.website
+company_domain: docs-planet.site
 ntp_timezone: America/Sao_Paulo
 proxy_enabled: false
 cluster_taint: true

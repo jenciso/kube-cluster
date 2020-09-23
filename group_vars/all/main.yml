@@ -15,7 +15,7 @@ kubernetes_cluster_name: "{{ cluster_domain | default('cluster.local') }}"
 kubernetes_cluster_cidr: 172.18.0.0/16
 kubernetes_cluster_dns: 10.254.0.10
 
-kubernetes_version: 1.17.2
+kubernetes_version: 1.15.11
 calico_version: 3.10.1
 etcd_version: 3.3.11
 istio_version: 1.4.0

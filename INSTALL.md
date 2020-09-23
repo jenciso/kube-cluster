@@ -5,13 +5,13 @@ Steps:
 * Step 1: Running the pre-requisites playbook
 
 ```bash
-ansible-playbook site-prerequisites.yml -i inventory-simple --extra-vars "@custom_vars.yml"
+ansible-playbook site-prerequisites.yml -i inventory --extra-vars "@custom_vars.yml"
 ```
 
 * Step 2: Deploying the cluster
 
-```
-ansible-playbook site.yml -i inventory-simple --extra-vars "@custom_vars.yml"
+```bash
+ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml"
 ```
 
 Notes:
@@ -25,15 +25,15 @@ Notes:
 
 Istio will be installed by default, but if you prefer install it manually, you could run this playbook
 
-```sh
-sudo ansible-playbook site.yml -i inventory-lab --extra-vars "@custom_vars.yml" -t istio -e "deploy_istio=true"
+```bash
+sudo ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml" -t istio -e "deploy_istio=true"
 ```
 
 ## Simple Cluster
 
-```shell
-sudo ansible-playbook site-prerequisites.yml -i inventory-lab --extra-vars "@custom_vars.yml" -e deploy_docker_lvm_storage=true 
-sudo ansible-playbook site.yml -i inventory-lab --extra-vars "@custom_vars.yml"  -e "cluster_taint=false" -e "deploy_glusterfs=true"
+```bash
+ansible-playbook site-prerequisites.yml -i inventory --extra-vars "@custom_vars.yml" -e deploy_docker_lvm_storage=true 
+ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml"  -e "cluster_taint=false" -e "deploy_glusterfs=true"
 ```
 
 
@@ -41,10 +41,12 @@ sudo ansible-playbook site.yml -i inventory-lab --extra-vars "@custom_vars.yml" 
 
 Steps:
 
-        sudo ansible -m shell -a "systemctl stop kube-apiserver kube-controller-manager kube-scheduler" -i inventory-lab master
-        sudo ansible -m shell -a "systemctl stop etcd" -i inventory-lab etcd
-        sudo ansible -m shell -a "systemctl stop kubelet kube-proxy docker" -i inventory-lab node
+```
+ansible -m shell -a "systemctl stop kube-apiserver kube-controller-manager kube-scheduler" -i inventory master
+ansible -m shell -a "systemctl stop etcd" -i inventory etcd
+ansible -m shell -a "systemctl stop kubelet kube-proxy docker" -i inventory node
 
-        sudo ansible -m shell -a 'rm -rf /var/lib/etcd/*' -i inventory-lab etcd
-        sudo ansible -m shell -a 'rm -rf /opt/kubernetes' -i inventory-lab master
-        sudo ansible -m shell -a 'rm -rf /var/lib/kubernetes /var/lib/kubelet /var/lib/kube-proxy' -i inventory-lab node
+ansible -m shell -a 'rm -rf /var/lib/etcd/*' -i inventory etcd
+ansible -m shell -a 'rm -rf /opt/kubernetes' -i inventory master
+ansible -m shell -a 'rm -rf /var/lib/kubernetes /var/lib/kubelet /var/lib/kube-proxy' -i inventory node
+```

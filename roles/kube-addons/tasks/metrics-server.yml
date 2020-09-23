@@ -1,17 +1,6 @@
 ---
-- name: metrics-server | download project
-  git:
-    repo: https://github.com/kubernetes-sigs/metrics-server.git
-    dest: /opt/metrics-server
-    force: yes
-  when:
-    - k8s_master_main|bool
-
-
 - name: metrics-server | install
-  shell: "kubectl apply -f deploy/1.8+/"
-  args: 
-    chdir: /opt/metrics-server
+  shell: "kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.7/components.yaml"
   ignore_errors: true
   when:
     - k8s_master_main|bool

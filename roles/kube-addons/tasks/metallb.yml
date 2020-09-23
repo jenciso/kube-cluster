@@ -18,3 +18,10 @@
   ignore_errors: true
   when:
     - k8s_master_main|bool
+
+
+- name: metallb | generating memberlist
+  shell: kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+  ignore_errors: true
+  when:
+    - k8s_master_main|bool

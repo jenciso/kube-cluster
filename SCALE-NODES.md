@@ -10,13 +10,13 @@ new_nodes
 ...
 ...
 [new_nodes]
-dcbvm090lb343.enciso.website  ipv4addr=10.64.13.220  k8s_node_group_name=compute  docker_lvm_setup=true  max_pods_per_node=220
+kube-w03.mycompany.com  ipv4addr=10.64.13.220  k8s_node_group_name=compute  docker_lvm_setup=true  max_pods_per_node=220
 ```
 
 * Run the ansible playbook
 
 ```
-sudo ansible-playbook site-scaleup.yml -i inventory-lab" \
+sudo ansible-playbook site-scaleup.yml -i inventory" \
 -e "deploy_docker_lvm_storage=true" \
 -e "deploy_workers=true" \
 -e "deploy_calico=true"
@@ -35,6 +35,6 @@ To delete nodes from the cluster follow this steps
 
 Ex:
 ```
-kubectl drain dcbvm090lb343.enciso.website --ignore-daemonsets
-kubectl delete node dcbvm090lb343.enciso.website
+kubectl drain kube-w03.mycompany.com --ignore-daemonsets
+kubectl delete node kube-w03.mycompany.com
 ```
