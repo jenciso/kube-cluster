@@ -1,0 +1,45 @@
+[KUBERNETES:children]
+lb
+master
+etcd
+node
+
+[tst:children]
+KUBERNETES
+
+[KUBERNETES:vars]
+env_site=lab
+lb_ip_apik8s=10.0.1.200
+metallb_default_pool=10.0.1.190-10.0.1.199
+deploy_docker_lvm_storage=false
+kubernetes_cluster_ha=false
+company_domain=enciso.website
+
+[lb]
+k8s-master.enciso.website  ipv4addr=10.0.1.200  kubernetes_cluster_ha=false
+
+[master]
+k8s-master.enciso.website  ipv4addr=10.0.1.200  k8s_master_main=true
+
+[etcd]
+k8s-master.enciso.website  ipv4addr=10.0.1.200
+
+[node_master]
+k8s-master.enciso.website  ipv4addr=10.0.1.200  k8s_node_group_name=master
+
+[node_infra]
+k8s-infra01.enciso.website  ipv4addr=10.0.1.201  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+k8s-infra02.enciso.website  ipv4addr=10.0.1.202  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+k8s-infra03.enciso.website  ipv4addr=10.0.1.203  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+
+[node_compute]
+k8s-node01.enciso.website  ipv4addr=10.0.1.204  k8s_node_group_name=compute
+k8s-node02.enciso.website  ipv4addr=10.0.1.205  k8s_node_group_name=compute
+
+[glusterfs:children]
+node_infra
+
+[node:children]
+node_master
+node_infra
+node_compute

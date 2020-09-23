@@ -1,6 +1,6 @@
 ---
 deploy_calico: false
 deploy_calicoctl: false
-calico_version: 3.10.1
+calico_version: 3.10.3
 calicoctl_install_url: https://github.com/projectcalico/calicoctl/releases/download/v{{ calico_version }}/calicoctl
 kubernetes_dir: /var/lib/kubernetes

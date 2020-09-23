@@ -5,13 +5,13 @@ deploy_control_plane: true
 deploy_workers: true
 deploy_calico: true
 deploy_addons: true
-deploy_glusterfs: false
+deploy_glusterfs: true
 deploy_prometheus: false
 deploy_istio: false
-deploy_metallb: false
+deploy_metallb: true
 
-company_domain: corp.beemovil.com
-ntp_timezone: America/Lima
+company_domain: enciso.website
+ntp_timezone: America/Sao_Paulo
 proxy_enabled: false
 cluster_taint: true
 

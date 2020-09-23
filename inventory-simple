@@ -8,29 +8,27 @@ node
 KUBERNETES
 
 [KUBERNETES:vars]
-env_site=tst
-lb_ip_apik8s=10.253.253.71
-metallb_default_pool=10.253.253.81-10.253.253.89
+env_site=lab
+lb_ip_apik8s=192.168.122.100
+metallb_default_pool=192.168.122.90-192.168.122.99
 deploy_docker_lvm_storage=false
 kubernetes_cluster_ha=false
-company_domain=corp.beemovil.com
+company_domain=enciso.website
 
 [lb]
-kube-master.corp.beemovil.com  ipv4addr=10.253.253.71  kubernetes_cluster_ha=false
+master-lab.enciso.website  ipv4addr=192.168.122.100  kubernetes_cluster_ha=false
 
 [master]
-kube-master.corp.beemovil.com  ipv4addr=10.253.253.71  k8s_master_main=true
+master-lab.enciso.website  ipv4addr=192.168.122.100  k8s_master_main=true
 
 [etcd]
-kube-master.corp.beemovil.com  ipv4addr=10.253.253.71
+master-lab.enciso.website  ipv4addr=192.168.122.100
 
 [node_master]
-kube-master.corp.beemovil.com  ipv4addr=10.253.253.71  k8s_node_group_name=master
+master-lab.enciso.website  ipv4addr=192.168.122.100  k8s_node_group_name=master
 
 [node_compute]
-kube-node01.corp.beemovil.com  ipv4addr=10.253.253.72  k8s_node_group_name=compute
-kube-node02.corp.beemovil.com  ipv4addr=10.253.253.73  k8s_node_group_name=compute
-kube-node03.corp.beemovil.com  ipv4addr=10.253.253.74  k8s_node_group_name=compute
+node01-lab.enciso.website  ipv4addr=192.168.122.101  k8s_node_group_name=compute
 
 
 [node:children]

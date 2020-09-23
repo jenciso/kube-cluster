@@ -28,7 +28,6 @@ ExecStart=/usr/bin/kube-apiserver \
   --kubelet-client-certificate={{ kubernetes_dir }}/kubernetes.pem \
   --kubelet-client-key={{ kubernetes_dir }}/kubernetes-key.pem \
   --kubelet-https=true \
-  --runtime-config=api/all \
   --service-account-key-file={{ kubernetes_dir }}/service-account-key.pem \
   --service-cluster-ip-range={{ kubernetes_service_ip_range }} \
   --service-node-port-range=30000-32767 \
