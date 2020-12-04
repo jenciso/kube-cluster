@@ -1,0 +1,9 @@
+---
+- name: kubernetes | ARK Backup and PV Backup
+  hosts: master[0]
+  remote_user: ansible
+  environment: "{{ proxy_env }}"
+  roles:
+    - role: kube-backup
+  tags:
+    - kube-backup
