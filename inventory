@@ -4,11 +4,11 @@ master
 etcd
 node
 
-[tst:children]
+[lab:children]
 KUBERNETES
 
 [KUBERNETES:vars]
-env_site=tst
+env_site=lab
 lb_ip_apik8s=10.64.13.110
 lb_ip_services=10.64.13.106
 lb_ip_internal_ingress=10.64.13.107
