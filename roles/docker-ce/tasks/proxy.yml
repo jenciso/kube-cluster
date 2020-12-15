@@ -1,7 +1,7 @@
 ---
 - name: docker-ce | create directory to override configuration
   file: path=/etc/systemd/system/docker.service.d state=directory
-  
+
 
 - name: docker-ce | change service config systemd
   template:

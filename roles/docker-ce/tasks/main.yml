@@ -3,10 +3,10 @@
   include: prereq.yml
   when: deploy_docker|bool
 
-    
+
 - name: docker | lvm partition
   include: lvm.yml
-  when: 
+  when:
     - deploy_docker_lvm_storage|bool
     - deploy_docker|bool
 

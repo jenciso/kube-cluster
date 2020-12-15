@@ -1,14 +1,6 @@
 ---
-- name: docker | Installing pre packages
-  yum: name=python-pip state=present
-
-
-- name: docker | installing pip packages
-  pip: name=docker-py
-
-
 - name: docker | Installing prereq packages
-  yum: 
+  yum:
     state: present
     name:
     - yum-utils

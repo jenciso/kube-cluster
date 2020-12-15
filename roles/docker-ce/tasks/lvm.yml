@@ -2,7 +2,7 @@
 - name: docker | Clean disk
   shell: wipefs -a {{ docker_lvm_device }}
   ignore_errors: true
-  when: 
+  when:
     - deploy_docker|bool
     - wipefs_device|bool
 
@@ -15,7 +15,7 @@
     state: present
   when: deploy_docker|bool
 
-  
+
 - name: docker | Configure VG
   lvg:
     vg: docker-vg
@@ -47,7 +47,7 @@
 
 
 - name: docker | mount filesystem
-  mount: 
+  mount:
     path: /var/lib/docker
     src: /dev/docker-vg/docker-pool
     fstype: xfs
