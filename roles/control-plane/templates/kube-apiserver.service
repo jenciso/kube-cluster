@@ -5,7 +5,6 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 [Service]
 ExecStart=/usr/bin/kube-apiserver \
   --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,NodeRestriction,Priority \
-  --feature-gates=PodPriority=true \
   --advertise-address={{ ipv4addr }} \
   --allow-privileged=true \
   --apiserver-count={{ groups['master'] | length }} \
