@@ -8,7 +8,7 @@ This playbook is based in the documment [Kubernetes the Hard Way](https://github
 
 ## Features
 
-- Kubernetes 1.17
+- Kubernetes 1.18
 - High Availability Cluster
 - Master nodes are running etcd daemon in cluster mode
 - Automatic node register using bootstrap option
