@@ -15,13 +15,13 @@ This playbook is based in the documment [Kubernetes the Hard Way](https://github
 - RBAC Authentication
 - Calico Network Support (new version)
 - Docker 19.03
-- CoreDNS 1.4
+- CoreDNS 1.6
 - GlusterFS - CNS
 - Istio 1.4
 
 ## Requirements 
 
-### Full cluster
+### Advanced cluster
 
 * 13 VM's Centos 7
 

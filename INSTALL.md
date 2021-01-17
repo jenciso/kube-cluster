@@ -5,13 +5,13 @@ Steps:
 * Step 1: Running the pre-requisites playbook
 
 ```bash
-ansible-playbook site-prerequisites.yml -i inventory --extra-vars "@custom_vars.yml"
+ansible-playbook site-prerequisites.yml -i inventory -e "@custom_vars.yml"
 ```
 
 * Step 2: Deploying the cluster
 
 ```bash
-ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml"
+ansible-playbook site.yml -i inventory -e "@custom_vars.yml"
 ```
 
 Notes:
@@ -26,14 +26,14 @@ Notes:
 Istio will be installed by default, but if you prefer install it manually, you could run this playbook
 
 ```bash
-sudo ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml" -t istio -e "deploy_istio=true"
+sudo ansible-playbook site.yml -i inventory -e "@custom_vars.yml" -t istio -e "deploy_istio=true"
 ```
 
 ## Simple Cluster
 
 ```bash
-ansible-playbook site-prerequisites.yml -i inventory --extra-vars "@custom_vars.yml" -e deploy_docker_lvm_storage=true 
-ansible-playbook site.yml -i inventory --extra-vars "@custom_vars.yml"  -e "cluster_taint=false" -e "deploy_glusterfs=true"
+ansible-playbook site-prerequisites.yml -i inventory -e "@custom_vars.yml" -e deploy_docker_lvm_storage=true 
+ansible-playbook site.yml -i inventory -e "@custom_vars.yml"  -e "cluster_taint=false" -e "deploy_glusterfs=true"
 ```
 
 

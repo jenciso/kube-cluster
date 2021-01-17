@@ -51,11 +51,11 @@ data:
         health
         kubernetes {{ kubernetes_cluster_name }} in-addr.arpa ip6.arpa {
           pods insecure
-          upstream
           fallthrough in-addr.arpa ip6.arpa
+          ttl 30
         }
         prometheus :9153
-        proxy . /etc/resolv.conf
+        forward . /etc/resolv.conf
         cache 30
         loop
         reload
@@ -100,7 +100,7 @@ spec:
                   values: ["true"]
       containers:
       - name: coredns
-        image: coredns/coredns:1.4.0
+        image: k8s.gcr.io/coredns:1.6.7
         imagePullPolicy: IfNotPresent
         resources:
           limits:

@@ -1,0 +1,59 @@
+[KUBERNETES:children]
+lb
+master
+etcd
+node
+
+[lab:children]
+KUBERNETES
+
+[KUBERNETES:vars]
+env_site=lab
+lb_ip_apik8s=10.64.13.110
+lb_ip_services=10.64.13.106
+lb_ip_internal_ingress=10.64.13.107
+lb_ip_external_ingress=10.64.13.108
+metallb_default_pool=10.64.13.130-10.64.13.139
+deploy_docker_lvm_storage=false
+kubernetes_cluster_ha=true
+company_domain=docs-planet.site
+
+[lb:vars]
+keepalived_router_id=35      # Any value between 0..255
+keepalived_check_process=haproxy
+
+[lb]
+kube-l01.docs-planet.site  ipv4addr=10.64.13.111  keepalived_role=MASTER keepalived_unicast_peer="{{ hostvars[groups['lb'][1]]['ansible_default_ipv4']['address'] }}"
+kube-l02.docs-planet.site  ipv4addr=10.64.13.112  keepalived_role=BACKUP keepalived_unicast_peer="{{ hostvars[groups['lb'][0]]['ansible_default_ipv4']['address'] }}"
+
+[master]
+kube-m01.docs-planet.site  ipv4addr=10.64.13.113  k8s_master_main=true
+kube-m02.docs-planet.site  ipv4addr=10.64.13.114  k8s_master_main=false
+kube-m03.docs-planet.site  ipv4addr=10.64.13.115  k8s_master_main=false
+
+[etcd]
+kube-m01.docs-planet.site  ipv4addr=10.64.13.113 
+kube-m02.docs-planet.site  ipv4addr=10.64.13.114 
+kube-m03.docs-planet.site  ipv4addr=10.64.13.115 
+
+[node_master]
+kube-m01.docs-planet.site  ipv4addr=10.64.13.113  k8s_node_group_name=master
+kube-m02.docs-planet.site  ipv4addr=10.64.13.114  k8s_node_group_name=master
+kube-m03.docs-planet.site  ipv4addr=10.64.13.115  k8s_node_group_name=master
+
+[node_infra]
+kube-i01.docs-planet.site  ipv4addr=10.64.13.116  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+kube-i02.docs-planet.site  ipv4addr=10.64.13.117  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+kube-i03.docs-planet.site  ipv4addr=10.64.13.118  k8s_node_group_name=infra  glusterfs_device="/dev/vdb"
+
+[node_compute]
+kube-w01.docs-planet.site  ipv4addr=10.64.13.119  k8s_node_group_name=compute
+kube-w02.docs-planet.site  ipv4addr=10.64.13.120  k8s_node_group_name=compute
+
+[glusterfs:children]
+node_infra
+
+[node:children]
+node_master
+node_infra
+node_compute

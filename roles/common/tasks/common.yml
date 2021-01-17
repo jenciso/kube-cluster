@@ -1,6 +1,6 @@
 ---
 - name: common |  Install CentOS  packages core
-  yum: 
+  package:
     state: present
     name:
     - net-tools
@@ -24,4 +24,12 @@
     - firewalld
     - python-firewall
   tags:
-    - common
+  - common
+
+- name: common | Addtional packages core
+  package:
+    state: present
+    name:
+    - git
+  tags:
+  - common-git
