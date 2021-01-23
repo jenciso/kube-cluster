@@ -1,0 +1,19 @@
+---
+- name: kube-backup | Install ark
+  include: ark.yml
+  tags:
+    - kube-backup
+
+
+- name: kube-backup | Deploy kubernetes yaml's
+  include: deploy.yml
+  when: deploy_ark
+  tags:
+    - kube-backup
+
+
+- name: kube-backup | Deploy backup-pv
+  include: pv.yml
+  when: deploy_backup_pv
+  tags:
+    - kube-backup

@@ -1,0 +1,9 @@
+---
+ark_version: 0.10.0
+deploy_ark: true
+deploy_backup_pv: false
+backup_minio_host: demo.s3.docs-planet.site
+backup_minio_url: http://demo.s3.docs-planet.site
+backup_minio_access_key: minio
+backup_minio_secret_key: minio123
+backup_pv_logfile: /var/log/backup-pv.log

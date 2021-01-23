@@ -1,0 +1,33 @@
+---
+- name: kube-backup | create /backup directory
+  file: path=/backup state=directory
+
+
+- name: kube-backup | download the mc binary
+  get_url:
+    url: https://dl.minio.io/client/mc/release/linux-amd64/mc
+    dest: /usr/bin/mc
+    mode: 0755
+
+
+- name: kube-backup | setup the S3 backup destination
+  shell: "mc config host add backup {{ backup_minio_url }} {{ backup_minio_access_key }} {{ backup_minio_secret_key }}"
+
+
+- name: kube-backup | setup the S3 bucket
+  shell: "mc ls backup/{{ backup_s3_bucket_pv }} || mc mb backup/{{ backup_s3_bucket_pv }}"
+  ignore_errors: true
+
+- name: kube-backup | copy script
+  template:
+    src: backup-pv.sh.j2
+    dest: /backup/backup-pv.sh
+    mode: 0755
+
+
+- name: kube-backup | crontab
+  cron:
+    name: "backup-pv | Execute backup of pv labeled as backup-pv=true"
+    minute: 0
+    hour: 5
+    job: /backup/backup-pv.sh

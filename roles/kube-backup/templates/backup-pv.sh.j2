@@ -1,0 +1,22 @@
+#!/bin/bash
+
+{% for key, value in backup_pv_data.iteritems() %}
+############################################
+## Backup for {{ key }} 
+############################################
+
+kubectl cp {{ value["namespace"] }}/$(kubectl get pod -n {{ value["namespace"] }} -l {{ value["label"] }} -o jsonpath="{.items[0].metadata.name}"):{{ value["src"] }} {{ value["dest"] }}
+tar cfz /backup/{{ key }}.`date +"%w"`.tar.gz /backup/{{ key }} && mc cp /backup/{{ key }}.`date +"%w"`.tar.gz backup/{{ backup_s3_bucket_pv }}
+
+if [ $? != 0 ]
+then
+  echo "`date +%s` [backup_pv] - {{ key }} - result=0" | tee -a {{ backup_pv_logfile }}
+else
+  echo "`date +%s` [backup_pv] - {{ key }} - result=1" | tee -a {{ backup_pv_logfile }}
+  rm -rf /backup/{{ key }}
+  rm -f /backup/{{ key }}.`date +"%w"`.tar.gz
+fi
+
+
+
+{% endfor %}
